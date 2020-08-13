@@ -1,7 +1,5 @@
 # Django-Tutorial-and-Mini-Projects
 
-# Django-Tutorial-and-Mini-Projects
-
 ## Installation
 ```sh
 pip install django
@@ -50,3 +48,57 @@ To start server . First server is started running successfully :)
 - Users can not directly view or interact with this data. The back-end is all about the behind-the-scene activities.
 
 - It is also referred to as the server-side.
+
+## Creating first page and building urls.py
+
+Create a views.py file in project folder which contains urls.py
+#### In urls.py
+```sh
+from . import views
+```
+```sh
+urlpatterns = [
+
+    path('admin/', admin.site.urls),
+
+    path('', views.index, name='index'),
+
+    path('about/', views.about, name='about'), # this is how new path of function in views.py is added to base url
+]
+```
+```sh
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse('''Welcome to first route made in django''')
+
+def about(request):
+    return HttpResponse("But wait this is the second one")    # HttpResponse wrap text in html
+```    
+http://127.0.0.1:8000/about/
+This will show you a page which gives an output which present in http response of about.
+
+## Django Templates
+
+#### Updating settings.py file
+We have to specify in seerings.py that there is a template folder in which we are putting the templates.Like this
+```sh
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ["templates"],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            # ... some options here ...
+        },
+    },
+]
+```
+All the html files can go in a newly created folder named templates.To access this we have to make changes in views.py
+```sh
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')
+```
+

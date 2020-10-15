@@ -102,3 +102,49 @@ def index(request):
     return render(request, 'index.html')
 ```
 
+## Creating an App and Add App.
+```sh
+python manage.py startapp appname
+```
+- Create a urls.py inside app to map its views.py things
+```sh
+from django.conf.urls import url
+from . import views
+
+urlpatters = [
+url(r'^$', views.description_page),
+]
+```
+
+- And create views.py inside app
+```sh
+from django.shortcuts import render
+
+# Create your views here.
+
+def description_page(request):
+	return render(request, 'desc_page/description_page.html')
+```
+- Add that app in settings.py add 'desc_page' like this
+```sh
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'desc_page',
+]
+```
+- Now join the urls.py of created app to mainm project urls.py
+```sh
+from django.contrib import admin
+from django.urls import path,include
+from django.conf.urls import url
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    url('', include('desc_page.urls')),
+]
+```

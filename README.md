@@ -148,3 +148,79 @@ urlpatterns = [
     url('', include('desc_page.urls')),
 ]
 ```
+## Creating model and create Admin superuser
+
+```sh
+from django.db import models
+
+
+class Anime(models.Model):
+	ALL_SEASONS = [
+	("WINTER", 'Winter'),
+	("SPRING", 'Spring'),
+	("FALL", 'Fall'),
+	("END", 'End'),
+	]
+
+	SHOW_STATUS = [
+	("RUNNING", 'Running'),    
+	("COMPLETED", 'Completed'),
+	]
+
+	anime_name = models.CharField(max_length=50)
+	anime_rank = models.IntegerField(default=0)
+	anime_rating = models.DecimalField(default = 0.0 , max_digits=2, decimal_places=2)
+	anime_thumbnail = models.ImageField(upload_to='images/')  
+	anime_popularity = models.IntegerField(default=0)
+	total_members = models.IntegerField(default=0)
+	synopsis = models.CharField(max_length=200)
+	start_season = models.CharField(
+        max_length=9,
+        choices=ALL_SEASONS,
+        default="WINTER",
+        )
+	start_year = models.IntegerField(default=0)
+	total_episodes = models.IntegerField(default=0)
+	status = models.CharField(
+        max_length=9,
+        choices=SHOW_STATUS,
+        default="RUNNING",
+    )
+    def __str__(self):
+         return self.anime_name
+```
+
+- Register app.py in settings
+```sh
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'desc_page.apps.DescPageConfig',
+    
+]
+```
+- Now makemigrations and migrate
+
+```sh
+python manage.py makemigrations app_name
+python manage.py migrate
+```
+
+- Creating superuser
+```sh
+python manage.py createsuperuser
+```
+username - animereco
+password - recoanime
+
+- Register Model to admin.py for its access in admin url
+```sh
+from django.contrib import admin
+from .models import Question
+
+admin.site.register(Question)
+```

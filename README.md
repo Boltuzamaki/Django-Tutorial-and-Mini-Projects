@@ -224,3 +224,91 @@ from .models import Question
 
 admin.site.register(Question)
 ```
+
+## Add data from csv to database
+
+```sh
+tmp_data=pd.read_csv('C://Users//boltuzamaki//Desktop//animereco//aniReco//general//databse_add.csv')
+try:
+    anime = [
+               Anime(
+	    		anime_id = tmp_data.iloc[row]['anime_id'] ,
+	    		anime_name = tmp_data.iloc[row]['title'] ,
+	    		anime_synonyms = tmp_data.iloc[row]['title_synonyms'], 
+	    		anime_type = tmp_data.iloc[row]['type'] ,
+	    		anime_rank = tmp_data.iloc[row]['rank'] ,
+	    		anime_score = tmp_data.iloc[row]['score'], 
+	    		anime_rating = tmp_data.iloc[row]['rating'], 
+			anime_thumbnail = tmp_data.iloc[row]['image_url'], 
+			anime_popularity = tmp_data.iloc[row]['popularity'], 
+			total_members = tmp_data.iloc[row]['members'] ,
+			genre = tmp_data.iloc[row]['genre'] ,
+			total_episodes = tmp_data.iloc[row]['episodes'], 
+			duration_min = tmp_data.iloc[row]['duration_min'],
+			studio = tmp_data.iloc[row]['studio'] ,
+			anime_premiered = tmp_data.iloc[row]['premiered'],
+			status = tmp_data.iloc[row]['status'] 
+			)
+	for row in range(0, len(tmp_data))
+	]
+except:
+	print("lol")
+Anime.objects.bulk_create(anime)
+```
+
+## Pagination
+
+modify function un views.py like 
+
+```sh 
+
+def top_anime(request):
+
+    anime_list = Anime.objects.order_by('anime_rank')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(anime_list, 5)
+    try:
+        anime_dict = paginator.page(page)
+    except PageNotAnInteger:
+    	anime_dict = paginator.page(1)
+    except EmptyPage:
+    	anime_dict = paginator.page(paginator.num_pages)
+
+    return render(request, 'general/top_anime.html',{ 'categories':anime_dict })
+ ```
+ 
+ #### Paginator logic in html for many pages
+ ```sh
+   	{% if categories.has_other_pages %}
+	  	<ul class="pagination">
+	  		{% if categories.has_previous %}
+	  			<a href="?page={{ categories.previous_page_number }}">&laquo;</a></li>
+	  		{% else %}
+	  			<li class="disabled"><span>&laquo;</span></li>
+	  		{% endif %}
+	  		{% for i in categories.paginator.page_range %}
+	  			{% if categories.number > 3 and forloop.first %}
+			  		<li><a href="?page=1">1</a></li>
+			  		<li class="disabled">⋯</li>
+				 {% endif %}
+				{% if categories.number == i %}
+					<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></li>
+				{% elif i > categories.number|add:'-3' and i < categories.number|add:'3' %}
+					<li><a href="?page={{ i }}">{{ i }}</a></li>
+				{% endif %}
+				{% if categories.paginator.num_pages > categories.number|add:'3' and forloop.last %}
+					<li>⋯</li>
+					<li><a href="?page={{ categories.paginator.num_pages }}">{{ categories.paginator.num_pages }}</a></li>
+				{% endif %}
+			{% endfor %}
+			{% if categories.has_next %}
+				<li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+			{% else %}
+				<li class="disabled">»</li>
+			{% endif %}
+		</ul>
+	{% endif %}
+```
+
+
+

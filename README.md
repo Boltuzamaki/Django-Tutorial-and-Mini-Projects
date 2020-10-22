@@ -311,4 +311,310 @@ def top_anime(request):
 ```
 
 
+## Create alphabet separated page and Query seperated page views.py and html
 
+```sh
+def pages(request, anime_alphabet):
+	anime_list = [Anime.objects.filter(anime_name__istartswith=i) for i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"]
+	alphabets_string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	index = alphabets_string.find(str(anime_alphabet))
+	page = request.GET.get('page', 1)
+	paginator = Paginator(anime_list[index], 18)
+	try:
+		anime_dict = paginator.page(page)
+	except PageNotAnInteger:
+		anime_dict = paginator.page(1)
+	except EmptyPage:
+		anime_dict = paginator.page(paginator.num_pages)
+	return render(request, 'general/home.html',{ 'categories':anime_dict })
+
+
+
+def genre(request):
+	genrename = ["Comedy","Supernatural","Romance","Shounen","Parody","School","Magic","Shoujo","Drama",  \
+    "Fantasy","Kids","Action","Music","SliceofLife","Josei","Harem","ShounenAi","Adventure","SuperPower","Sci-Fi",   \
+    "Ecchi","Seinen","MartialArts","Game","Sports","Demons","Historical","Horror","Mystery","Psychological",      \
+    "Vampire","Mecha","Military","Space","Samurai","Thriller","Hentai","Yaoi","ShoujoAi","Police","Cars",       \
+    "Dementia","Yuri"]
+	lists = []
+	for gen in genrename:
+		if request.GET.get(str(gen), 'off') == "on":
+			lists.append(gen)
+	context = { 'genrename':genrename }
+
+	try:
+		anime_dict = Anime.objects.filter(genre__in=lists)
+		#print(lists)
+		#print(anime_dict)
+		page = request.GET.get('page', 1)
+		paginator = Paginator(anime_dict, 18)
+		try:
+			anime_dict = paginator.page(page)
+		except PageNotAnInteger:
+			anime_dict = paginator.page(1)
+		except EmptyPage:
+			anime_dict = paginator.page(paginator.num_pages)
+		context = { 'genrename':genrename ,'categories':anime_dict }
+
+
+        
+	except:
+		pass		
+
+
+
+	return render(request, 'general/genre.html', context)
+```
+
+#### Html Alphabets sort
+
+```sh
+{% extends 'general/base.html' %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3 class="text-center">Welcome to aniReco</h3><br><br>
+        </div>
+    </div>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Filters
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="/genre">Genre</a></li>
+    <li><a href="#">Running Status</a></li>
+    <li><a href="#">Blah</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Blah</a></li>
+  </ul>
+</div>
+
+    <div class="row text-center">
+    <ul class="list-inline">
+        <li class="first-char">
+       		<a href="s" rel="all" class="active">All</a>
+        </li>
+        <li class="first-char">
+       		<a href="/list-0" rel="0" class="">#</a>
+        </li>
+    	   <li class="first-char">
+       		<a href="/general/A" rel="" class="">A</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/B" rel="" class="">B</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/C" rel="" class="">C</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/D" rel="" class="">D</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/E" rel="" class="">E</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/F" rel="" class="">F</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/G" rel="" class="">G</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/H" rel="" class="">H</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/I" rel="" class="">I</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/J" rel="" class="">J</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/K" rel="" class="">K</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/L" rel="" class="">L</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/M" rel="" class="">M</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/N" rel="" class="">N</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/O" rel="" class="">O</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/P" rel="" class="">P</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/Q" rel="" class="">Q</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/R" rel="" class="">R</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/S" rel="" class="">S</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/T" rel="" class="">T</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/U" rel="" class="">U</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/V" rel="" class="">V</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/W" rel="" class="">W</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/X" rel="" class="">X</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/Y" rel="" class="">Y</a>
+        </li>
+        <li class="first-char">
+       		<a href="/general/Z" rel="" class="">Z</a>
+        </li>
+     </ul>
+    </div>
+
+{% if categories %}
+{% for category in categories %}
+    <div class="col-sm-4 col-lg-2">
+    	<div class="thumbnail text-center">
+            <img src="{{ category.anime_thumbnail }}" alt="anime pic" class="ing-responsive" style="width:100px;height:150px;object-fit:scale-down;">
+            <div class="caption" style="height:80px">
+            <h8>{{ category.anime_id }}</h8>
+            <h6>{{ category.anime_name }}</h6>
+            </div>                
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+</div>
+<div class="row text-center">
+{% if categories.has_other_pages %}
+  	<ul class="pagination">
+  		{% if categories.has_previous %}
+  			<a href="?page={{ categories.previous_page_number }}">&laquo;</a></li>
+  		{% else %}
+  			<li class="disabled"><span>&laquo;</span></li>
+  		{% endif %}
+  		{% for i in categories.paginator.page_range %}
+  			{% if categories.number > 3 and forloop.first %}
+		  		<li><a href="?page=1">1</a></li>
+		  		<li class="disabled">⋯</li>
+			 {% endif %}
+			{% if categories.number == i %}
+				<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></li>
+			{% elif i > categories.number|add:'-3' and i < categories.number|add:'3' %}
+				<li><a href="?page={{ i }}">{{ i }}</a></li>
+			{% endif %}
+			{% if categories.paginator.num_pages > categories.number|add:'3' and forloop.last %}
+				<li>⋯</li>
+				<li><a href="?page={{ categories.paginator.num_pages }}">{{ categories.paginator.num_pages }}</a></li>
+			{% endif %}
+		{% endfor %}
+		{% if categories.has_next %}
+			<li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+		{% else %}
+			<li class="disabled">»</li>
+		{% endif %}
+	</ul>
+{% endif %}
+</div>
+
+{% endblock %}
+```
+
+#### Html query seperated
+```sh
+{% extends 'general/base.html' %}
+{% block title %}Home{% endblock %}
+{% block body %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3 class="text-center">Welcome to aniReco</h3><br><br>
+        </div>
+    </div>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Filters
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    
+    <li><a href="/general/genre">Genre</a></li>
+    <li><a href="#">Running Status</a></li>
+    <li><a href="#">Blah</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Blah</a></li>
+  </ul>
+</div>
+<div class="row text-center">
+<form action='#' method='get'>
+  
+    {% for name in genrename %}
+    <label class="checkbox-inline">
+    <input type="checkbox" name="{{ name }}">{{ name }}<br>
+  </label>
+    {% endfor %}
+
+    <br>
+    <button type='submit'> Submit</button>
+   
+</form>
+
+{% if categories %}
+{% for category in categories %}
+    <div class="col-sm-4 col-lg-2">
+      <div class="thumbnail text-center">
+            <img src="{{ category.anime_thumbnail }}" alt="anime pic" class="ing-responsive" style="width:100px;height:150px;object-fit:scale-down;">
+            <div class="caption" style="height:80px">
+            <h8>{{ category.anime_id }}</h8>
+            <h6>{{ category.anime_name }}</h6>
+            </div>                
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+    
+    {% if categories.has_other_pages %}
+      <ul class="pagination">
+        {% if categories.has_previous %}
+          <a href="?page={{ categories.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in categories.paginator.page_range %}
+          {% if categories.number > 3 and forloop.first %}
+            <li><a href="?page=1">1</a></li>
+            <li class="disabled">⋯</li>
+         {% endif %}
+        {% if categories.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></li>
+        {% elif i > categories.number|add:'-3' and i < categories.number|add:'3' %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+        {% if categories.paginator.num_pages > categories.number|add:'3' and forloop.last %}
+          <li>⋯</li>
+          <li><a href="?page={{ categories.paginator.num_pages }}">{{ categories.paginator.num_pages }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if categories.has_next %}
+        <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled">»</li>
+      {% endif %}
+    </ul>
+  {% endif %}
+</div>
+
+{% endblock %}
+```

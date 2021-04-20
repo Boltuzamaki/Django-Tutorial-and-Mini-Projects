@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^form/', include('form_1.urls')),
+    url(r'^user/', include('form_2.urls')),
 ]

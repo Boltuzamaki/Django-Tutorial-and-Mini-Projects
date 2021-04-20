@@ -5,8 +5,23 @@
     <title>Model</title>
   </head>
   <body>
-    <h1>Hello I am test page</h1>
-    {{ insert_content }}
+    <h1>Hello here is your access record</h1>
+    {% if access_record %}
+    <table>
+      <thead>
+        <th>Site Name</th>
+        <th>Date Accessed</th>
+      </thead>
+      {% for acc in access_record %}
+      <tr>
+        <td>{{ acc.name }}</td>
+        <td>{{ acc.date }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <h3>No Access Record Found</h3>
+    {% endif %}
 
   </body>
 </html>

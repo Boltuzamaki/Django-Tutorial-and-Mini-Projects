@@ -20,6 +20,7 @@ from django.conf.urls import url,include
 
 urlpatterns = [
     url(r'^$', views.index, name='index1'),
-    url(r'^basic_app/', include('basic_app.urls')),
+    url(r'^basic_app/$', include('basic_app.urls')),
     path('admin/', admin.site.urls),
+    url(r'^inherit/', include('template_inheritence.urls')),
 ]
